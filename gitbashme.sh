@@ -4,7 +4,7 @@
 git init
 
 # Agregar todos los archivos al área de staging
-git add .
+# git add .
 
 # Commit inicial
 git commit -m "gitbashme"
