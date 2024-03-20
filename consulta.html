@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrar Productos</title>
+  <!-- Enlaces a los archivos CSS de Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Administrar Productos</h2>
+  
+  <!-- Formulario para agregar y actualizar productos -->
+  <form id="formularioProducto">
+    <input type="hidden" id="idProducto" name="idProducto">
+    <div class="form-group">
+      <label for="nombre">Nombre del producto:</label>
+      <input type="text" class="form-control" id="nombre" name="nombre">
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción del producto:</label>
+      <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+
+  <!-- Tabla para mostrar los productos -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Acciones</th> <!-- Columna de acciones -->
+      </tr>
+    </thead>
+    <tbody id="tablaProductos">
+      <!-- Aquí se mostrarán los productos -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Enlaces a los archivos JavaScript de Bootstrap y jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Script para obtener y mostrar los datos de la tabla -->
+<script>
+$(document).ready(function(){
+  // Función para obtener y mostrar los productos
+  function mostrarProductos() {
+    $.ajax({
+      url: 'obtener_productos.php', // Archivo PHP que obtiene los datos de la tabla
+      method: 'GET',
+      success: function(response) {
+        $('#tablaProductos').html(response); // Mostrar los datos en la tabla
+      }
+    });
+  }
+
+  // Llamar a la función para mostrar los productos al cargar la página
+  mostrarProductos();
+
+  // Capturar el envío del formulario para agregar o actualizar un producto
+  $('#formularioProducto').submit(function(event) {
+    event.preventDefault(); // Evitar que se recargue la página
+
+    // Obtener los datos del formulario
+    var formData = $(this).serialize();
+
+    // Enviar los datos mediante AJAX para agregar o actualizar el producto
+    $.ajax({
+      url: 'agregar_actualizar_producto.php',
+      method: 'POST',
+      data: formData,
+      success: function(response) {
+        mostrarProductos(); // Volver a mostrar la tabla de productos
+        $('#formularioProducto')[0].reset(); // Limpiar el formulario
+      }
+    });
+  });
+
+  // Función para editar un producto
+  function editarProducto(id) {
+    // Obtener los datos del producto mediante AJAX y mostrarlos en el formulario
+    $.ajax({
+      url: 'obtener_producto.php',
+      method: 'GET',
+      data: { id: id },
+      dataType: 'json',
+      success: function(response) {
+        $('#idProducto').val(response.id);
+        $('#nombre').val(response.nombre);
+        $('#descripcion').val(response.descripcion);
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>
