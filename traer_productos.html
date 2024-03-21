@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario para agregar producto</title>
+    <!-- Enlace al archivo CSS de Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Formulario para agregar un nuevo producto -->
+<form id="formularioAgregarProducto">
+    <div class="form-group">
+        <label for="nombreProducto">Nombre del Producto:</label>
+        <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Ingrese el nombre del producto" required>
+    </div>
+    <div class="form-group">
+        <label for="descripcionProducto">Descripción del Producto:</label>
+        <textarea class="form-control" id="descripcionProducto" name="descripcionProducto" rows="3" placeholder="Ingrese la descripción del producto" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Producto</button>
+</form>
+
+<!-- Enlace al archivo JavaScript de jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Script para manejar el envío del formulario -->
+<script>
+    $(document).ready(function() {
+        $('#formularioAgregarProducto').submit(function(event) {
+            event.preventDefault(); // Detener el envío del formulario predeterminado
+
+            // Obtener los datos del formulario
+            var nombreProducto = $('#nombreProducto').val();
+            var descripcionProducto = $('#descripcionProducto').val();
+
+            // Enviar los datos al servidor mediante AJAX
+            $.ajax({
+                url: './traer_informacion.php', // URL del script PHP para agregar producto
+                method: 'POST',
+                data: {
+                    nombreProducto: nombreProducto,
+                    descripcionProducto: descripcionProducto
+                },
+                success: function(response) {
+                    // Manejar la respuesta del servidor
+                    console.log(response); // Puedes mostrar un mensaje de éxito o redirigir a otra página
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores de AJAX
+                    console.error(error); // Puedes mostrar un mensaje de error o realizar otras acciones
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

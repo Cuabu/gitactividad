@@ -1,17 +1,34 @@
 <?php
 
-require_once './configuracion.php';
+// Datos de conexión a la base de datos
+$servername = "localhost"; // Nombre del servidor
+$username = "root"; // Nombre de usuario
+$password = ""; // Contraseña
+$dbname = "gitactividad"; // Nombre de la base de datos
 
-// Crear una instancia de la clase Conexion
-$conexion = new Conexion();
-$db = $conexion->getConexion();
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verificar si la conexión fue exitosa
-if ($db->connect_error) {
-    echo "Error al conectar a la base de datos: " . $db->connect_error;
-} else {
-    echo "La conexión a la base de datos fue exitosa.";
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
 }
 
-// Desconectar la base de datos
-$conexion->desconectar();
+// Consulta SQL
+$sql = "SELECT * FROM productos"; // Reemplaza 'tabla' con el nombre de tu tabla
+
+// Ejecutar la consulta
+$result = $conn->query($sql);
+
+// Verificar si la consulta fue exitosa
+if ($result) {
+    echo "La consulta fue exitosa.";
+    // Aquí puedes realizar operaciones adicionales con los resultados
+} else {
+    echo "Error al ejecutar la consulta: " . $conn->error;
+}
+
+// Cerrar la conexión
+$conn->close();
+
+?>
